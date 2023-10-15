@@ -5,8 +5,6 @@ var gl;
 var NumVertices  = 9;
 var NumBody = 4;
 var NumTail = 3;
-var numFins;
-var numFinVertices;
 var fishSize = 0.05;
 var tailSize = 0.8;
 // Hnútar fisks á xy-planinu
@@ -26,7 +24,6 @@ var vertices = [
 ];
 //Hnútar tenings
 var tankVertices = [
-    // Define the vertices for the tank
     vec4(-50, -50, -50, 1.0),
     vec4(50, -50, -50, 1.0),
     vec4(50, 50, -50, 1.0),
@@ -45,17 +42,17 @@ var tankIndices = [
     4, 5, 6, 6, 7, 4, // Back face
     5, 4, 0, 0, 1, 5  // Left face
 ];
-var movement = false;     // Er músarhnappur niðri?
+var movement = false; 
 var spinX = 0;
 var spinY = 0;
 var origX;
 var origY;
 
-var rotTail = 0.0;        // Snúningshorn sporðs
+var rotTail = 0.0;     
 var incTailTail = 0.05; 
 var incTailFin = 0.05;
 var rotFin = 1.0;
-var zView = 75.0;          // Staðsetning áhorfanda á z-hniti
+var zView = 75.0;      
 
 var proLoc;
 var mvLoc;
@@ -72,20 +69,16 @@ var vBuffer;
 var tankBuffer;
 var tankIndexBuffer;
 var vPosition;
-var fishPos = vec4(0.0,0.0,0.0);
-var fishPos2 = vec4(120.0,0.120,0.0);
 
 var tankBoundary = 500;
 var fishSpeed = 0.5;
-var fishDirection = vec4(0.5,0.0,0.0,0.0);
-var fishDirection2 = vec4(-0.5,0.0,0.0,0.0);
 
 var rotFish = 0;
 
 
 var fishes = [];
 
-var colorArray = [
+var colorArray = [ 
     // Blue
     vec4(0.2, 0.5, 0.8, 1.0),
     vec4(0.6, 0.7, 0.9, 1.0),
@@ -126,15 +119,14 @@ function drawFish(mv, rotTail, rotFin,fish) {
     mv = mult(mv, rotateY(spinY));
 
 
-    // Apply the calculated rotations to make the fish point in the direction it's going
 
     // update positions
     fish.fishPos[0] += fish.fishDirection[0];
     fish.fishPos[1] += fish.fishDirection[1];
     fish.fishPos[2] += fish.fishDirection[2];
 
-    var phaseShiftTail = (Math.random() * Math.PI) /10; // Generate a random phase shift for the tail
-    var phaseShiftFin = (Math.random() * Math.PI) /10; // Generate a random phase shift for the fins
+    var phaseShiftTail = (Math.random() * Math.PI) /10; 
+    var phaseShiftFin = (Math.random() * Math.PI) /10; 
 
     gl.uniform4fv(colorLoc, fish.fishColor);
     
@@ -158,12 +150,11 @@ function drawFish(mv, rotTail, rotFin,fish) {
     // Apply translation to the tail
     tailMV = mult(tailMV, translate(-80.0, 80.0, -111.0));
   
-    gl.uniform4fv(colorLoc,fish.finsColor); // Example color (blue)
+    gl.uniform4fv(colorLoc,fish.finsColor); 
 
     // Draw the tail of the fish
     gl.uniformMatrix4fv(mvLoc, false, flatten(tailMV));
-    gl.drawArrays(gl.TRIANGLES, NumBody, NumTail); // Update the arguments accordingly
-
+    gl.drawArrays(gl.TRIANGLES, NumBody, NumTail);
     drawFins(mv, rotTail+phaseShiftFin, 1,fish.finsColor); // for the right fin
     drawFins(mv, rotFin+phaseShiftFin, -1,fish.finsColor); // for the left fin
 }
@@ -314,9 +305,7 @@ function render()
     
 
 
-   // mv = mult(mv, rotateZ(rotFish));
 
-    //mv = mult(mv, translate(0.0, 0.0, 0.0)); 
     rotTail += incTailTail;
     if (rotTail > 5.0 || rotTail < -5.0)
         incTailTail *= -1;
@@ -331,11 +320,10 @@ function render()
         for (var j = 0; j < 3; j++) {
             if (fishes[i].fishPos[j] > tankBoundary) {
 
-                fishes[i].fishPos[j] = -tankBoundary; // Set position to the negative boundary value
-
+                fishes[i].fishPos[j] = -tankBoundary; 
             } else if (fishes[i].fishPos[j] < -tankBoundary) {
 
-                fishes[i].fishPos[j] = tankBoundary; // Set position to the positive boundary value
+                fishes[i].fishPos[j] = tankBoundary; 
 
             }
         }
